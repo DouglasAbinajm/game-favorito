@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Favorito — Sobre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="crt-overlay"></div>
+<div id="ink-progress"><div id="ink-progress-fill"></div></div>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand">
+      <span class="mark">GAME FAVORITO</span>
+    </div>
+    <nav class="site">
+      <a href="index.html">Início</a>
+      <div class="nav-dropdown">
+        <a href="emuladores.html" id="nav-downloads">Downloads</a>
+        <div class="dropdown-menu">
+          <a href="emuladores.html" data-cat="Emuladores"><span class="dd-icon"></span>Emuladores</a>
+          <a href="roms.html" data-cat="Roms"><span class="dd-icon"></span>Roms</a>
+          <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
+          <a href="revistas.html" data-cat="Revistas"><span class="dd-icon"></span>Revistas</a>
+        </div>
+      </div>
+      <a href="sobre.html" class="active">Sobre</a>
+      <a href="contato.html">Contato</a>
+      <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="eyebrow blink">&#9656; PRESS START</div>
+    <h1>SOBRE O GAME FAVORITO</h1>
+    <p class="lede">Um refúgio pixelado para quem cresceu com um controle na mão.</p>
+  </section>
+
+  <main class="page-content">
+    <p>Este espaço nasceu da vontade de guardar memória de uma era em que cada jogo cabia num cartucho e cada high score era conquistado com o corpo inteiro grudado na máquina. Aqui, cada texto tenta entender o que esses jogos ainda têm a ensinar. <em>Substitua este parágrafo pela sua própria apresentação.</em></p>
+  </main>
+
+  <footer class="simple">
+    <div class="footer-meta">
+      GAME FAVORITO © 2026<br>
+      Feito com HTML, CSS e JavaScript puro.
+    </div>
+  </footer>
+</div>
+
+<script src="site.js"></script>
+<script src="player.js"></script>
+</body>
+</html>

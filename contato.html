@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Favorito — Contato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="crt-overlay"></div>
+<div id="ink-progress"><div id="ink-progress-fill"></div></div>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand">
+      <span class="mark">GAME FAVORITO</span>
+    </div>
+    <nav class="site">
+      <a href="index.html">Início</a>
+      <div class="nav-dropdown">
+        <a href="emuladores.html" id="nav-downloads">Downloads</a>
+        <div class="dropdown-menu">
+          <a href="emuladores.html" data-cat="Emuladores"><span class="dd-icon"></span>Emuladores</a>
+          <a href="roms.html" data-cat="Roms"><span class="dd-icon"></span>Roms</a>
+          <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
+          <a href="revistas.html" data-cat="Revistas"><span class="dd-icon"></span>Revistas</a>
+        </div>
+      </div>
+      <a href="sobre.html">Sobre</a>
+      <a href="contato.html" class="active">Contato</a>
+      <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="eyebrow">&#9656; CONTINUE?</div>
+    <h1>CONTATO</h1>
+    <p class="lede">Dúvidas, sugestões de pauta ou só quer trocar uma ideia sobre retrogames? Manda um recado.</p>
+  </section>
+
+  <main class="page-content">
+    <form class="contact-form" id="contact-form">
+      <input type="text" id="contact-name" placeholder="Seu nome" required>
+      <input type="email" id="contact-email" placeholder="seu@email.com" required>
+      <textarea id="contact-message" placeholder="Sua mensagem..." rows="5" required></textarea>
+      <button type="submit">ENVIAR</button>
+    </form>
+    <div class="contact-msg" id="contact-msg"></div>
+
+    <div class="contact-info">
+      Ou envie um e-mail direto para <a href="mailto:contato@gamefavorito.com">contato@gamefavorito.com</a>
+    </div>
+  </main>
+
+  <footer class="simple">
+    <div class="footer-meta">
+      GAME FAVORITO © 2026<br>
+      Feito com HTML, CSS e JavaScript puro.
+    </div>
+  </footer>
+</div>
+
+<script src="site.js"></script>
+<script src="player.js"></script>
+<script>
+document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('contact-name').value.trim();
+  const msg = document.getElementById('contact-msg');
+  if (!name) return;
+  msg.textContent = `Valeu, ${name}! Sua mensagem foi enviada (simulação — conecte a um serviço de e-mail real).`;
+  document.getElementById('contact-form').reset();
+  setTimeout(() => { msg.textContent = ''; }, 5000);
+});
+</script>
+</body>
+</html>

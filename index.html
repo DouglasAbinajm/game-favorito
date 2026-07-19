@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Favorito — Início</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="crt-overlay"></div>
+<div id="ink-progress"><div id="ink-progress-fill"></div></div>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand">
+      <span class="mark">GAME FAVORITO</span>
+    </div>
+    <nav class="site">
+      <a href="index.html" class="active" id="nav-home">Início</a>
+      <div class="nav-dropdown">
+        <a id="nav-downloads" tabindex="0" role="button" aria-haspopup="true">Downloads</a>
+        <div class="dropdown-menu">
+          <a href="emuladores.html" data-cat="Emuladores"><span class="dd-icon"></span>Emuladores</a>
+          <a href="roms.html" data-cat="Roms"><span class="dd-icon"></span>Roms</a>
+          <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
+          <a href="revistas.html" data-cat="Revistas"><span class="dd-icon"></span>Revistas</a>
+        </div>
+      </div>
+      <a href="sobre.html">Sobre</a>
+      <a href="contato.html">Contato</a>
+      <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
+    </nav>
+  </header>
+
+  <section class="hero" id="view-hero">
+    <img class="banner-svg" src="banner.png" alt="Game Favorito — Nostalgia que nunca acaba. Arte pixel art com personagens e castelos de RPGs clássicos." />
+    <div class="eyebrow blink">▸ PRESS START</div>
+    <h1>Notas sobre os jogos que moldaram uma geração inteira de jogadores.</h1>
+    <p class="lede">Um caderno público sobre consoles, fliperamas, cartuchos e a cultura que nasceu junto com os primeiros pixels. Sem nostalgia vazia — só o que ainda ensina algo hoje.</p>
+  </section>
+
+  <section class="controls">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Buscar por título ou palavra-chave...">
+    </div>
+    <div class="tags" id="tag-list"></div>
+    <div class="result-count" id="result-count"></div>
+  </section>
+
+  <main>
+    <section id="view-list">
+      <div class="post-grid" id="post-grid"></div>
+    </section>
+
+    <section id="view-post" class="hidden">
+      <button class="back-link" onclick="goHome()">◂ VOLTAR</button>
+      <div class="post-header">
+        <div class="eyebrow" id="post-eyebrow"></div>
+        <h1 id="post-title"></h1>
+        <div class="meta" id="post-meta"></div>
+      </div>
+      <div class="post-body" id="post-body"></div>
+
+      <div class="likes-row">
+        <button class="like-btn" id="post-like-btn">♥ <span id="post-like-count">0</span> curtidas</button>
+      </div>
+
+      <hr class="divider">
+
+      <div class="comments">
+        <h3 id="comments-title">COMENTÁRIOS</h3>
+        <form class="comment-form" id="comment-form">
+          <input type="text" id="comment-name" placeholder="Seu nome" required>
+          <textarea id="comment-text" placeholder="Escreva um comentário..." rows="3" required></textarea>
+          <button type="submit">PUBLICAR</button>
+        </form>
+        <div id="comments-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="simple">
+    <div class="footer-meta">
+      GAME FAVORITO © 2026<br>
+      Feito com HTML, CSS e JavaScript puro.
+    </div>
+  </footer>
+</div>
+
+<script src="site.js"></script>
+<script src="player.js"></script>
+
+<script>
+/* ============ DADOS DE EXEMPLO — substitua pelos seus posts reais ============ */
+const posts = [
+  {
+    id: 1,
+    title: "O primeiro console do mundo",
+    tags: ["Consoles"],
+    date: "2026-07-15",
+    excerpt: "O primeiro console doméstico do mundo foi o Magnavox Odyssey , lançado nos Estados Unidos em 1972 por US$ 100.",
+    video: "UeRpfWcHuR0",
+    body: [
+      "No primeiro console doméstico do mundo foi o Magnavox Odyssey , lançado nos Estados Unidos em 1972 por US$ 100. Criado pelo engenheiro Ralph Baer, ​​o aparelho não tinha gráficos complexos e confortáveis ​​que os jogadores colassem folhas de plástico coloridas e semitransparentes diretamente na tela da TV para simular os cenários.",
+      "Para entendermos um pouco melhor, assista a esse vídeo maravilhoso falando um pouco do começo de tudo, onde a história se iniciava!",
+    ]
+  },
+  {
+    id: 2,
+    title: "Por que jogos de 16 bits ainda parecem atuais",
+    tags: ["Retrospectiva"],
+    date: "2026-05-18",
+    excerpt: "Pixel art bem feita não envelhece do mesmo jeito que um gráfico 3D tentando parecer realista.",
+    body: [
+      "Um jogo 3D antigo costuma envelhecer mal porque tentava imitar a realidade com recursos limitados — e o resultado, hoje, parece uma versão incompleta de algo. Já a pixel art nunca tentou ser realista: ela sempre foi uma linguagem visual própria, com suas próprias regras.",
+      "Isso significa que um cenário bem desenhado em 16 bits ainda comunica exatamente o que queria comunicar na época — não porque a tecnologia envelheceu bem, mas porque o estilo nunca dependeu da tecnologia para funcionar.",
+      "Tentar reproduzir esse efeito hoje, décadas depois, tornou-se um gênero à parte. E funciona, porque o que fazia aqueles jogos bonitos nunca foi a quantidade de cores disponíveis — foi a escolha de como usá-las."
+    ]
+  },
+  {
+    id: 3,
+    title: "A história por trás do recorde mais lendário do fliperama",
+    tags: ["Arcade"],
+    date: "2026-04-30",
+    excerpt: "Antes da internet, bater um recorde significava provar presencialmente, na frente de testemunhas, que aquilo realmente aconteceu.",
+    body: [
+      "Sem gravação de tela, sem replay automático e sem placar online, um recorde de fliperama só existia se alguém tivesse visto. Isso criava uma cultura estranha e fascinante: jogadores viajavam para acompanhar tentativas ao vivo, e a palavra de quem estava presente valia mais que qualquer número.",
+      "Muitas dessas histórias hoje soam quase lendárias — números que parecem exagerados, sessões de jogo que duravam o dia inteiro, máquinas que precisavam ser fisicamente monitoradas para garantir que ninguém desligasse no meio de uma tentativa.",
+      "O que essas histórias revelam não é só sobre habilidade, mas sobre como a ausência de registro digital transformava cada recorde em um evento social, não só numérico."
+    ]
+  },
+  {
+    id: 4,
+    title: "Cartuchos, fitas e a arte perdida de soprar o cartucho",
+    tags: ["Curiosidades"],
+    date: "2026-04-09",
+    excerpt: "Um ritual que virou mito: soprar o cartucho quase nunca resolvia o problema que todo mundo achava que resolvia.",
+    body: [
+      "Quase todo mundo que jogou naquela época tem a mesma lembrança: o cartucho não funcionava, então soprava-se dentro dele antes de tentar de novo. Curiosamente, o gesto raramente era a causa da solução — o mais provável é que o próprio ato de remover e recolocar o cartucho já resolvesse o contato elétrico.",
+      "Mais do que uma solução técnica, virou um ritual coletivo, passado de jogador para jogador sem nenhuma explicação oficial. Era conhecimento popular, transmitido boca a boca, exatamente como muita cultura de jogos daquela era.",
+      "Hoje sabemos que a umidade do sopro podia até acelerar a corrosão dos contatos a longo prazo. Mas isso não muda o carinho que existe em lembrar do gesto — ele era, antes de tudo, parte do jogo."
+    ]
+  },
+  {
+    id: 5,
+    title: "Como um punhado de pixels virou personagem",
+    tags: ["Cultura Pop"],
+    date: "2026-03-22",
+    excerpt: "Antes do 3D, criar um personagem memorável era um exercício de economia: dizer o máximo com o mínimo de blocos coloridos.",
+    body: [
+      "Com poucos pixels disponíveis para desenhar um rosto, os designers precisavam decidir exatamente quais detalhes importavam. Um personagem não podia ter expressão sutil — precisava ser reconhecível numa tela pequena, de longe, em movimento.",
+      "Esse tipo de restrição obrigou a indústria a pensar em silhueta antes de pensar em detalhe. Se a forma geral não funcionasse, nenhum detalhe interno salvaria o design — uma lição que continua válida mesmo em jogos com gráficos muito mais avançados.",
+      "É por isso que tantos personagens daquela era ainda são reconhecíveis só pelo contorno, sem nenhuma cor. O design já estava resolvido antes mesmo de qualquer pixel ser pintado."
+    ]
+  },
+];
+
+/* ============ ESTADO ============ */
+let currentTag = null;
+let currentPostId = null;
+
+const likesKey = id => `insertcoin_likes_${id}`;
+const commentsKey = id => `insertcoin_comments_${id}`;
+
+function readingTime(bodyArr){
+  const words = bodyArr.join(' ').split(/\s+/).length;
+  return Math.max(1, Math.round(words / 180));
+}
+
+function formatDate(iso){
+  const d = new Date(iso + "T12:00:00");
+  return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }).replace('.', '');
+}
+
+/* ============ TAGS ============ */
+function renderTags(){
+  const allTags = [...new Set(posts.flatMap(p => p.tags))];
+  const tagList = document.getElementById('tag-list');
+  tagList.innerHTML = '';
+  const allChip = document.createElement('div');
+  allChip.className = 'tag-chip' + (currentTag === null ? ' active' : '');
+  allChip.textContent = 'TODOS';
+  allChip.onclick = () => { currentTag = null; renderTags(); renderGrid(); };
+  tagList.appendChild(allChip);
+  allTags.forEach(tag => {
+    const chip = document.createElement('div');
+    chip.className = 'tag-chip' + (currentTag === tag ? ' active' : '');
+    chip.textContent = tag.toUpperCase();
+    chip.onclick = () => { currentTag = (currentTag === tag ? null : tag); renderTags(); renderGrid(); };
+    tagList.appendChild(chip);
+  });
+}
+
+/* ============ GRID ============ */
+function getLikeCount(id){ return parseInt(localStorage.getItem(likesKey(id)) || '0', 10); }
+function isLiked(id){ return localStorage.getItem(likesKey(id) + '_liked') === '1'; }
+function toggleLike(id, btnEl, countEl){
+  const liked = isLiked(id);
+  let count = getLikeCount(id);
+  if (liked){
+    count = Math.max(0, count - 1);
+    localStorage.setItem(likesKey(id) + '_liked', '0');
+  } else {
+    count = count + 1;
+    localStorage.setItem(likesKey(id) + '_liked', '1');
+  }
+  localStorage.setItem(likesKey(id), String(count));
+  if (countEl) countEl.textContent = count;
+  if (btnEl) btnEl.classList.toggle('liked', !liked);
+}
+
+function renderGrid(){
+  const query = document.getElementById('search-input').value.trim().toLowerCase();
+  const grid = document.getElementById('post-grid');
+  grid.innerHTML = '';
+
+  const filtered = posts.filter(p => {
+    const matchesTag = currentTag === null || p.tags.includes(currentTag);
+    const haystack = (p.title + ' ' + p.excerpt + ' ' + p.body.join(' ')).toLowerCase();
+    const matchesQuery = query === '' || haystack.includes(query);
+    return matchesTag && matchesQuery;
+  });
+
+  document.getElementById('result-count').textContent =
+    filtered.length === posts.length ? `${posts.length} FASES` : `${filtered.length} DE ${posts.length} FASES`;
+
+  if (filtered.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'GAME OVER — nada encontrado. Tente outra palavra ou remova o filtro.';
+    grid.appendChild(empty);
+    return;
+  }
+
+  filtered.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'post-card';
+    card.tabIndex = 0;
+    card.innerHTML = `
+      <div class="post-meta-row">
+        <span>${formatDate(p.date)}</span>
+        <span>${readingTime(p.body)} MIN</span>
+      </div>
+      <h2>${p.title}</h2>
+      <p class="excerpt">${p.excerpt}</p>
+      <div class="card-tags">${p.tags.map(t => `<span>${t.toUpperCase()}</span>`).join('')}</div>
+      <div class="card-foot">
+        <span>LER →</span>
+        <button class="like-btn ${isLiked(p.id) ? 'liked' : ''}" data-id="${p.id}">♥ <span>${getLikeCount(p.id)}</span></button>
+      </div>
+    `;
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.like-btn')) return;
+      openPost(p.id);
+    });
+    card.addEventListener('keypress', (e) => { if (e.key === 'Enter') openPost(p.id); });
+    const likeBtn = card.querySelector('.like-btn');
+    likeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleLike(p.id, likeBtn, likeBtn.querySelector('span'));
+    });
+    grid.appendChild(card);
+    requestAnimationFrame(() => setTimeout(() => card.classList.add('show'), i * 40));
+  });
+}
+
+/* ============ POST VIEW ============ */
+function openPost(id){
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+  currentPostId = id;
+
+  document.getElementById('view-hero').classList.add('hidden');
+  document.querySelector('.controls').classList.add('hidden');
+  document.getElementById('view-list').classList.add('hidden');
+  document.getElementById('view-post').classList.remove('hidden');
+  document.querySelectorAll('nav.site a').forEach(a => a.classList.remove('active'));
+
+  document.getElementById('post-eyebrow').textContent = post.tags.map(t => t.toUpperCase()).join(' · ');
+  document.getElementById('post-title').textContent = post.title;
+  document.getElementById('post-meta').innerHTML = `
+    <span>${formatDate(post.date)}</span>
+    <span>${readingTime(post.body)} MIN DE LEITURA</span>
+  `;
+  document.getElementById('post-body').innerHTML =
+    post.body.map(p => `<p>${p}</p>`).join('') +
+    (post.video ? `
+      <div class="post-video">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/${post.video}"
+          title="Vídeo do YouTube"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    ` : '');
+
+  const likeBtn = document.getElementById('post-like-btn');
+  const likeCountEl = document.getElementById('post-like-count');
+  likeBtn.classList.toggle('liked', isLiked(post.id));
+  likeCountEl.textContent = getLikeCount(post.id);
+  likeBtn.onclick = () => toggleLike(post.id, likeBtn, likeCountEl);
+
+  renderComments(post.id);
+  window.scrollTo({ top: 0 });
+}
+
+function setActiveNav(id){
+  document.querySelectorAll('nav.site a').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function goHome(){
+  currentPostId = null;
+  document.getElementById('view-hero').classList.remove('hidden');
+  document.querySelector('.controls').classList.remove('hidden');
+  document.getElementById('view-list').classList.remove('hidden');
+  document.getElementById('view-post').classList.add('hidden');
+  setActiveNav('nav-home');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ COMMENTS ============ */
+function getComments(id){
+  try { return JSON.parse(localStorage.getItem(commentsKey(id)) || '[]'); }
+  catch(e){ return []; }
+}
+function saveComment(id, comment){
+  const list = getComments(id);
+  list.push(comment);
+  localStorage.setItem(commentsKey(id), JSON.stringify(list));
+}
+function renderComments(id){
+  const list = getComments(id);
+  const container = document.getElementById('comments-list');
+  document.getElementById('comments-title').textContent = `COMENTÁRIOS (${list.length})`;
+  if (list.length === 0){
+    container.innerHTML = '<div class="no-comments">Seja a primeira pessoa a comentar.</div>';
+    return;
+  }
+  container.innerHTML = list.map(c => `
+    <div class="comment-item">
+      <div class="who">${escapeHtml(c.name)} <span class="when">${c.when}</span></div>
+      <p>${escapeHtml(c.text)}</p>
+    </div>
+  `).join('');
+}
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+document.getElementById('comment-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('comment-name').value.trim();
+  const text = document.getElementById('comment-text').value.trim();
+  if (!name || !text || currentPostId === null) return;
+  saveComment(currentPostId, {
+    name, text,
+    when: new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+  });
+  document.getElementById('comment-name').value = '';
+  document.getElementById('comment-text').value = '';
+  renderComments(currentPostId);
+});
+
+/* ============ SEARCH ============ */
+document.getElementById('search-input').addEventListener('input', renderGrid);
+
+/* ============ INIT ============ */
+renderTags();
+renderGrid();
+</script>
+</body>
+</html>
