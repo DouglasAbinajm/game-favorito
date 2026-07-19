@@ -156,7 +156,7 @@
   }
   .post-card{
     background:var(--bg-panel); border:2px solid var(--line); padding:24px; cursor:pointer;
-    display:flex; flex-direction:column; gap:12px;
+    display:flex; flex-direction:column; gap:12px; text-decoration:none;
     opacity:0; transform:translateY(14px);
     transition:opacity .5s ease, transform .5s ease, border-color .2s ease, box-shadow .2s ease;
     clip-path:polygon(0 8px, 8px 8px, 8px 0, calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px));
@@ -235,6 +235,15 @@
   .comment-item .when{ color:var(--text-soft); font-family:var(--body); font-size:15px; margin-left:8px; }
   .comment-item p{ margin:0; font-size:19px; }
   .no-comments{ font-family:var(--body); font-size:17px; color:var(--text-soft); padding:12px 0; }
+
+  .post-file{ margin:8px 0 28px; }
+  .dl-btn{
+    font-family:var(--display); font-size:10px; text-align:center; text-decoration:none;
+    background:var(--cyan); color:#0D0221; border:2px solid var(--text);
+    padding:10px 18px; box-shadow:3px 3px 0 var(--pink); display:inline-block;
+  }
+  .dl-btn:hover{ background:var(--yellow); }
+  .dl-btn:active{ box-shadow:1px 1px 0 var(--pink); transform:translate(2px,2px); }
 
   /* ---- Downloads: subnav ---- */
   .dl-subnav{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:32px; }

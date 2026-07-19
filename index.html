@@ -29,6 +29,7 @@
           <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
         </div>
       </div>
+      <a href="busca.html">Buscar</a>
       <a href="sobre.html">Sobre</a>
       <a href="contato.html">Contato</a>
       <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
@@ -90,73 +91,28 @@
   </footer>
 </div>
 
+<script src="materias.js"></script>
 <script src="site.js"></script>
 <script src="player.js"></script>
 
 <script>
-/* ============ DADOS DE EXEMPLO — substitua pelos seus posts reais ============ */
-const posts = [
-  {
-    id: 1,
-    title: "O primeiro console do mundo",
-    tags: ["Consoles"],
-    date: "2026-07-15",
-    excerpt: "O primeiro console doméstico do mundo foi o Magnavox Odyssey , lançado nos Estados Unidos em 1972 por US$ 100.",
-    video: "UeRpfWcHuR0",
-    body: [
-      "No primeiro console doméstico do mundo foi o Magnavox Odyssey , lançado nos Estados Unidos em 1972 por US$ 100. Criado pelo engenheiro Ralph Baer, ​​o aparelho não tinha gráficos complexos e confortáveis ​​que os jogadores colassem folhas de plástico coloridas e semitransparentes diretamente na tela da TV para simular os cenários.",
-      "Para entendermos um pouco melhor, assista a esse vídeo maravilhoso falando um pouco do começo de tudo, onde a história se iniciava!",
-    ]
-  },
-  {
-    id: 2,
-    title: "Por que jogos de 16 bits ainda parecem atuais",
-    tags: ["Retrospectiva"],
-    date: "2026-05-18",
-    excerpt: "Pixel art bem feita não envelhece do mesmo jeito que um gráfico 3D tentando parecer realista.",
-    body: [
-      "Um jogo 3D antigo costuma envelhecer mal porque tentava imitar a realidade com recursos limitados — e o resultado, hoje, parece uma versão incompleta de algo. Já a pixel art nunca tentou ser realista: ela sempre foi uma linguagem visual própria, com suas próprias regras.",
-      "Isso significa que um cenário bem desenhado em 16 bits ainda comunica exatamente o que queria comunicar na época — não porque a tecnologia envelheceu bem, mas porque o estilo nunca dependeu da tecnologia para funcionar.",
-      "Tentar reproduzir esse efeito hoje, décadas depois, tornou-se um gênero à parte. E funciona, porque o que fazia aqueles jogos bonitos nunca foi a quantidade de cores disponíveis — foi a escolha de como usá-las."
-    ]
-  },
-  {
-    id: 3,
-    title: "A história por trás do recorde mais lendário do fliperama",
-    tags: ["Arcade"],
-    date: "2026-04-30",
-    excerpt: "Antes da internet, bater um recorde significava provar presencialmente, na frente de testemunhas, que aquilo realmente aconteceu.",
-    body: [
-      "Sem gravação de tela, sem replay automático e sem placar online, um recorde de fliperama só existia se alguém tivesse visto. Isso criava uma cultura estranha e fascinante: jogadores viajavam para acompanhar tentativas ao vivo, e a palavra de quem estava presente valia mais que qualquer número.",
-      "Muitas dessas histórias hoje soam quase lendárias — números que parecem exagerados, sessões de jogo que duravam o dia inteiro, máquinas que precisavam ser fisicamente monitoradas para garantir que ninguém desligasse no meio de uma tentativa.",
-      "O que essas histórias revelam não é só sobre habilidade, mas sobre como a ausência de registro digital transformava cada recorde em um evento social, não só numérico."
-    ]
-  },
-  {
-    id: 4,
-    title: "Cartuchos, fitas e a arte perdida de soprar o cartucho",
-    tags: ["Curiosidades"],
-    date: "2026-04-09",
-    excerpt: "Um ritual que virou mito: soprar o cartucho quase nunca resolvia o problema que todo mundo achava que resolvia.",
-    body: [
-      "Quase todo mundo que jogou naquela época tem a mesma lembrança: o cartucho não funcionava, então soprava-se dentro dele antes de tentar de novo. Curiosamente, o gesto raramente era a causa da solução — o mais provável é que o próprio ato de remover e recolocar o cartucho já resolvesse o contato elétrico.",
-      "Mais do que uma solução técnica, virou um ritual coletivo, passado de jogador para jogador sem nenhuma explicação oficial. Era conhecimento popular, transmitido boca a boca, exatamente como muita cultura de jogos daquela era.",
-      "Hoje sabemos que a umidade do sopro podia até acelerar a corrosão dos contatos a longo prazo. Mas isso não muda o carinho que existe em lembrar do gesto — ele era, antes de tudo, parte do jogo."
-    ]
-  },
-  {
-    id: 5,
-    title: "Como um punhado de pixels virou personagem",
-    tags: ["Cultura Pop"],
-    date: "2026-03-22",
-    excerpt: "Antes do 3D, criar um personagem memorável era um exercício de economia: dizer o máximo com o mínimo de blocos coloridos.",
-    body: [
-      "Com poucos pixels disponíveis para desenhar um rosto, os designers precisavam decidir exatamente quais detalhes importavam. Um personagem não podia ter expressão sutil — precisava ser reconhecível numa tela pequena, de longe, em movimento.",
-      "Esse tipo de restrição obrigou a indústria a pensar em silhueta antes de pensar em detalhe. Se a forma geral não funcionasse, nenhum detalhe interno salvaria o design — uma lição que continua válida mesmo em jogos com gráficos muito mais avançados.",
-      "É por isso que tantos personagens daquela era ainda são reconhecíveis só pelo contorno, sem nenhuma cor. O design já estava resolvido antes mesmo de qualquer pixel ser pintado."
-    ]
-  },
-];
+/* ============ DADOS: vêm todos do materias.js ============
+   Pra publicar uma matéria nova, edite APENAS o arquivo
+   materias.js — este script só decide como exibir o que
+   estiver lá.
+============================================================ */
+
+/* Quantas matérias recentes aparecem na página inicial.
+   Ao publicar uma matéria nova (com data mais recente) no
+   materias.js, a mais antiga sai automaticamente da home —
+   mas continua acessível para sempre na página da sua categoria. */
+const HOME_LIMIT = 5;
+
+function getHomePosts(){
+  return [...MATERIAS]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, HOME_LIMIT);
+}
 
 /* ============ ESTADO ============ */
 let currentTag = null;
@@ -177,7 +133,7 @@ function formatDate(iso){
 
 /* ============ TAGS ============ */
 function renderTags(){
-  const allTags = [...new Set(posts.flatMap(p => p.tags))];
+  const allTags = [...new Set(getHomePosts().flatMap(p => p.tags))];
   const tagList = document.getElementById('tag-list');
   tagList.innerHTML = '';
   const allChip = document.createElement('div');
@@ -217,7 +173,8 @@ function renderGrid(){
   const grid = document.getElementById('post-grid');
   grid.innerHTML = '';
 
-  const filtered = posts.filter(p => {
+  const homePosts = getHomePosts();
+  const filtered = homePosts.filter(p => {
     const matchesTag = currentTag === null || p.tags.includes(currentTag);
     const haystack = (p.title + ' ' + p.excerpt + ' ' + p.body.join(' ')).toLowerCase();
     const matchesQuery = query === '' || haystack.includes(query);
@@ -225,7 +182,7 @@ function renderGrid(){
   });
 
   document.getElementById('result-count').textContent =
-    filtered.length === posts.length ? `${posts.length} FASES` : `${filtered.length} DE ${posts.length} FASES`;
+    filtered.length === homePosts.length ? `${homePosts.length} FASES` : `${filtered.length} DE ${homePosts.length} FASES`;
 
   if (filtered.length === 0){
     const empty = document.createElement('div');
@@ -268,10 +225,16 @@ function renderGrid(){
 }
 
 /* ============ POST VIEW ============ */
-function openPost(id){
-  const post = posts.find(p => p.id === id);
+function openPost(id, updateUrl){
+  const post = MATERIAS.find(p => p.id === id);
   if (!post) return;
   currentPostId = id;
+
+  if (updateUrl !== false){
+    const url = new URL(window.location.href);
+    url.searchParams.set('post', id);
+    history.pushState({ post: id }, '', url);
+  }
 
   document.getElementById('view-hero').classList.add('hidden');
   document.querySelector('.controls').classList.add('hidden');
@@ -298,6 +261,11 @@ function openPost(id){
           loading="lazy">
         </iframe>
       </div>
+    ` : '') +
+    (post.file ? `
+      <div class="post-file">
+        <a class="dl-btn" href="${post.file}" download>${post.fileLabel || 'BAIXAR ARQUIVO'} ▾</a>
+      </div>
     ` : '');
 
   const likeBtn = document.getElementById('post-like-btn');
@@ -316,13 +284,18 @@ function setActiveNav(id){
   if (el) el.classList.add('active');
 }
 
-function goHome(){
+function goHome(updateUrl){
   currentPostId = null;
   document.getElementById('view-hero').classList.remove('hidden');
   document.querySelector('.controls').classList.remove('hidden');
   document.getElementById('view-list').classList.remove('hidden');
   document.getElementById('view-post').classList.add('hidden');
   setActiveNav('nav-home');
+  if (updateUrl !== false){
+    const url = new URL(window.location.href);
+    url.searchParams.delete('post');
+    history.pushState({}, '', url);
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -377,6 +350,27 @@ document.getElementById('search-input').addEventListener('input', renderGrid);
 /* ============ INIT ============ */
 renderTags();
 renderGrid();
+
+/* Se chegou aqui por um link tipo index.html?post=3 (vindo de
+   retro.html ou atuais.html), abre a matéria certa direto. */
+(function openFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const postId = parseInt(params.get('post'), 10);
+  if (!isNaN(postId)){
+    openPost(postId, false);
+  }
+})();
+
+/* Suporte ao botão "voltar" do navegador entre a home e uma matéria. */
+window.addEventListener('popstate', () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = parseInt(params.get('post'), 10);
+  if (!isNaN(postId)){
+    openPost(postId, false);
+  } else {
+    goHome(false);
+  }
+});
 </script>
 </body>
 </html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Favorito — Buscar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="crt-overlay"></div>
+<div id="ink-progress"><div id="ink-progress-fill"></div></div>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand">
+      <span class="mark">GAME FAVORITO</span>
+    </div>
+    <nav class="site">
+      <a href="index.html" id="nav-home">Início</a>
+      <div class="nav-dropdown">
+        <a id="nav-materias" tabindex="0" role="button" aria-haspopup="true">Matérias</a>
+        <div class="dropdown-menu">
+          <a href="retro.html" data-cat="Retrô"><span class="dd-icon"></span>Retrô</a>
+          <a href="atuais.html" data-cat="Atuais"><span class="dd-icon"></span>Atuais</a>
+          <a href="revistas.html" data-cat="Revistas"><span class="dd-icon"></span>Revistas</a>
+          <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
+        </div>
+      </div>
+      <a href="busca.html" class="active">Buscar</a>
+      <a href="sobre.html">Sobre</a>
+      <a href="contato.html">Contato</a>
+      <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="eyebrow blink">&#9656; SELECT</div>
+    <h1>BUSCAR</h1>
+    <p class="lede">Pesquise por nome de jogo, console ou qualquer palavra-chave em todas as matérias do site — Retrô, Atuais, Revistas e Detonados.</p>
+  </section>
+
+  <main class="page-content">
+    <div class="controls" style="border-bottom:none; padding-top:0;">
+      <div class="search-box" style="max-width:520px;">
+        <input type="text" id="global-search-input" placeholder="Ex: Super Nintendo, fliperama, pixel art..." autofocus>
+      </div>
+      <div class="result-count" id="search-result-count"></div>
+    </div>
+    <div class="post-grid" id="search-grid"></div>
+  </main>
+
+  <footer class="simple">
+    <div class="footer-meta">
+      GAME FAVORITO © 2026<br>
+      Feito com HTML, CSS e JavaScript puro.
+    </div>
+  </footer>
+</div>
+
+<script src="materias.js"></script>
+<script src="materias-render.js"></script>
+<script src="site.js"></script>
+<script src="player.js"></script>
+<script>
+  const searchInput = document.getElementById('global-search-input');
+  const resultCount = document.getElementById('search-result-count');
+
+  function runSearch(query){
+    const results = searchMaterias(query);
+    renderSearchResults(results, 'search-grid');
+    resultCount.textContent = query.trim() === ''
+      ? ''
+      : `${results.length} RESULTADO${results.length === 1 ? '' : 'S'}`;
+  }
+
+  searchInput.addEventListener('input', () => {
+    const url = new URL(window.location.href);
+    if (searchInput.value.trim() === '') url.searchParams.delete('q');
+    else url.searchParams.set('q', searchInput.value);
+    history.replaceState({}, '', url);
+    runSearch(searchInput.value);
+  });
+
+  /* Se chegou aqui com busca.html?q=algo (ex: um link compartilhado),
+     já preenche o campo e mostra os resultados. */
+  (function initFromUrl(){
+    const q = new URLSearchParams(window.location.search).get('q') || '';
+    searchInput.value = q;
+    runSearch(q);
+  })();
+</script>
+</body>
+</html>
