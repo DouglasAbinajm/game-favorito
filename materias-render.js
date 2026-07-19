@@ -35,22 +35,21 @@ function renderMateriaCategory(category, containerId){
       </div>
       <h2>${m.title}</h2>
       <p class="excerpt">${m.excerpt}</p>
-      <div class="card-tags">${m.tags.map(t => `<span>${t.toUpperCase()}</span>`).join('')}</div>
       <div class="card-foot"><span>LER →</span></div>
     </a>
   `).join('');
 }
 
 /* ============ BUSCA GLOBAL ============
-   Pesquisa em título, resumo, tags e corpo do texto de TODAS as
-   matérias, não importa a categoria. */
+   Pesquisa em título, resumo, categoria e corpo do texto de TODAS
+   as matérias, não importa a categoria. */
 function searchMaterias(query){
   const q = query.trim().toLowerCase();
   if (q === '') return [];
   return MATERIAS
     .filter(m => {
       const haystack = (
-        m.title + ' ' + m.excerpt + ' ' + m.tags.join(' ') + ' ' + m.body.join(' ')
+        m.title + ' ' + m.excerpt + ' ' + m.category + ' ' + m.body.join(' ')
       ).toLowerCase();
       return haystack.includes(q);
     })
@@ -73,7 +72,6 @@ function renderSearchResults(list, containerId){
       </div>
       <h2>${m.title}</h2>
       <p class="excerpt">${m.excerpt}</p>
-      <div class="card-tags">${m.tags.map(t => `<span>${t.toUpperCase()}</span>`).join('')}</div>
       <div class="card-foot"><span>LER →</span></div>
     </a>
   `).join('');

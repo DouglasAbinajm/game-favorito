@@ -115,8 +115,18 @@ function getHomePosts(){
 }
 
 /* ============ ESTADO ============ */
-let currentTag = null;
+let currentCategory = null;
 let currentPostId = null;
+
+/* Nomes de exibição das categorias (com acento) — os valores
+   salvos no materias.js ficam sem acento (Retro, Atuais,
+   Revistas, Detonados) pra evitar erro de digitação. */
+const CATEGORY_LABELS = {
+  Retro: 'Retrô',
+  Atuais: 'Atuais',
+  Revistas: 'Revistas',
+  Detonados: 'Detonados'
+};
 
 const likesKey = id => `insertcoin_likes_${id}`;
 const commentsKey = id => `insertcoin_comments_${id}`;
@@ -131,21 +141,21 @@ function formatDate(iso){
   return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }).replace('.', '');
 }
 
-/* ============ TAGS ============ */
+/* ============ FILTRO POR CATEGORIA ============ */
 function renderTags(){
-  const allTags = [...new Set(getHomePosts().flatMap(p => p.tags))];
+  const allCats = [...new Set(getHomePosts().map(p => p.category))];
   const tagList = document.getElementById('tag-list');
   tagList.innerHTML = '';
   const allChip = document.createElement('div');
-  allChip.className = 'tag-chip' + (currentTag === null ? ' active' : '');
+  allChip.className = 'tag-chip' + (currentCategory === null ? ' active' : '');
   allChip.textContent = 'TODOS';
-  allChip.onclick = () => { currentTag = null; renderTags(); renderGrid(); };
+  allChip.onclick = () => { currentCategory = null; renderTags(); renderGrid(); };
   tagList.appendChild(allChip);
-  allTags.forEach(tag => {
+  allCats.forEach(cat => {
     const chip = document.createElement('div');
-    chip.className = 'tag-chip' + (currentTag === tag ? ' active' : '');
-    chip.textContent = tag.toUpperCase();
-    chip.onclick = () => { currentTag = (currentTag === tag ? null : tag); renderTags(); renderGrid(); };
+    chip.className = 'tag-chip' + (currentCategory === cat ? ' active' : '');
+    chip.textContent = (CATEGORY_LABELS[cat] || cat).toUpperCase();
+    chip.onclick = () => { currentCategory = (currentCategory === cat ? null : cat); renderTags(); renderGrid(); };
     tagList.appendChild(chip);
   });
 }
@@ -175,10 +185,10 @@ function renderGrid(){
 
   const homePosts = getHomePosts();
   const filtered = homePosts.filter(p => {
-    const matchesTag = currentTag === null || p.tags.includes(currentTag);
+    const matchesCategory = currentCategory === null || p.category === currentCategory;
     const haystack = (p.title + ' ' + p.excerpt + ' ' + p.body.join(' ')).toLowerCase();
     const matchesQuery = query === '' || haystack.includes(query);
-    return matchesTag && matchesQuery;
+    return matchesCategory && matchesQuery;
   });
 
   document.getElementById('result-count').textContent =
@@ -203,7 +213,7 @@ function renderGrid(){
       </div>
       <h2>${p.title}</h2>
       <p class="excerpt">${p.excerpt}</p>
-      <div class="card-tags">${p.tags.map(t => `<span>${t.toUpperCase()}</span>`).join('')}</div>
+      <div class="card-tags"><span>${(CATEGORY_LABELS[p.category] || p.category).toUpperCase()}</span></div>
       <div class="card-foot">
         <span>LER →</span>
         <button class="like-btn ${isLiked(p.id) ? 'liked' : ''}" data-id="${p.id}">♥ <span>${getLikeCount(p.id)}</span></button>
@@ -242,7 +252,7 @@ function openPost(id, updateUrl){
   document.getElementById('view-post').classList.remove('hidden');
   document.querySelectorAll('nav.site a').forEach(a => a.classList.remove('active'));
 
-  document.getElementById('post-eyebrow').textContent = post.tags.map(t => t.toUpperCase()).join(' · ');
+  document.getElementById('post-eyebrow').textContent = (CATEGORY_LABELS[post.category] || post.category).toUpperCase();
   document.getElementById('post-title').textContent = post.title;
   document.getElementById('post-meta').innerHTML = `
     <span>${formatDate(post.date)}</span>

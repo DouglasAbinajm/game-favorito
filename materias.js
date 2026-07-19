@@ -11,7 +11,6 @@
                       'Retro', 'Atuais', 'Revistas' ou 'Detonados'.
                       É isso que decide em qual página ela vai
                       aparecer permanentemente.
-      - tags       → uma ou mais palavras-chave, ex: ["Consoles"]
       - date       → data no formato AAAA-MM-DD. É por essa data
                       que a ordem "mais recente primeiro" é decidida.
       - excerpt    → um resumo curto (aparece nos cards)
@@ -33,14 +32,13 @@
         revistas.html ou detonados.html), ela aparece SEMPRE,
         para sempre, não importa há quanto tempo foi publicada.
       - Na busca (busca.html), ela aparece se o termo buscado
-        estiver no título, resumo, tags ou texto da matéria.
+        estiver no título, resumo, categoria ou texto da matéria.
 ============================================================ */
 const MATERIAS = [
   {
     id: 9,
     title: "Edição Nº 01 — Revista de época",
     category: "Revistas",
-    tags: ["Revista"],
     date: "2026-02-10",
     excerpt: "Espaço reservado para a primeira edição digitalizada. Descreva aqui o que essa edição trazia de especial.",
     file: "downloads/revista-01.pdf",
@@ -54,7 +52,6 @@ const MATERIAS = [
     id: 10,
     title: "Edição Nº 02 — Revista de época",
     category: "Revistas",
-    tags: ["Revista"],
     date: "2026-01-20",
     excerpt: "Espaço reservado para a segunda edição digitalizada.",
     file: "downloads/revista-02.pdf",
@@ -68,7 +65,6 @@ const MATERIAS = [
     id: 11,
     title: "Detonado — Jogo clássico 1",
     category: "Detonados",
-    tags: ["Detonado"],
     date: "2026-02-20",
     excerpt: "Guia completo, fase a fase, para zerar esse jogo sem travar em nenhum ponto.",
     file: "downloads/detonado-01.pdf",
@@ -82,7 +78,6 @@ const MATERIAS = [
     id: 12,
     title: "Detonado — Jogo clássico 2",
     category: "Detonados",
-    tags: ["Detonado"],
     date: "2026-01-05",
     excerpt: "Guia passo a passo para o segundo jogo da lista.",
     file: "downloads/detonado-02.pdf",
@@ -96,7 +91,6 @@ const MATERIAS = [
     id: 1,
     title: "O primeiro console do mundo",
     category: "Retro",
-    tags: ["Consoles"],
     date: "2026-07-15",
     excerpt: "O primeiro console doméstico do mundo foi o Magnavox Odyssey, lançado nos Estados Unidos em 1972 por US$ 100.",
     video: "UeRpfWcHuR0",
@@ -109,7 +103,6 @@ const MATERIAS = [
     id: 6,
     title: "O que os remakes acertam (e erram) sobre nostalgia",
     category: "Atuais",
-    tags: ["Nostalgia"],
     date: "2026-07-10",
     excerpt: "Relançar um jogo antigo parece simples, mas mexer com a memória afetiva de quem jogou o original é um equilíbrio delicado.",
     body: [
@@ -122,7 +115,6 @@ const MATERIAS = [
     id: 7,
     title: "Pixel art no design de jogos atuais",
     category: "Atuais",
-    tags: ["Design"],
     date: "2026-06-25",
     excerpt: "Mesmo com hardware capaz de renderizar qualquer coisa, cada vez mais estúdios escolhem voltar aos pixels — e não é só nostalgia.",
     body: [
@@ -135,7 +127,6 @@ const MATERIAS = [
     id: 2,
     title: "Por que jogos de 16 bits ainda parecem atuais",
     category: "Retro",
-    tags: ["Retrospectiva"],
     date: "2026-05-18",
     excerpt: "Pixel art bem feita não envelhece do mesmo jeito que um gráfico 3D tentando parecer realista.",
     body: [
@@ -148,7 +139,6 @@ const MATERIAS = [
     id: 8,
     title: "O que esperar dos próximos lançamentos",
     category: "Atuais",
-    tags: ["Lançamentos"],
     date: "2026-05-05",
     excerpt: "Um panorama rápido do que está no radar, sem hype vazio — só o que realmente vale acompanhar.",
     body: [
@@ -160,7 +150,6 @@ const MATERIAS = [
     id: 3,
     title: "A história por trás do recorde mais lendário do fliperama",
     category: "Retro",
-    tags: ["Arcade"],
     date: "2026-04-30",
     excerpt: "Antes da internet, bater um recorde significava provar presencialmente, na frente de testemunhas, que aquilo realmente aconteceu.",
     body: [
@@ -173,7 +162,6 @@ const MATERIAS = [
     id: 4,
     title: "Cartuchos, fitas e a arte perdida de soprar o cartucho",
     category: "Retro",
-    tags: ["Curiosidades"],
     date: "2026-04-09",
     excerpt: "Um ritual que virou mito: soprar o cartucho quase nunca resolvia o problema que todo mundo achava que resolvia.",
     body: [
@@ -186,7 +174,6 @@ const MATERIAS = [
     id: 5,
     title: "Como um punhado de pixels virou personagem",
     category: "Retro",
-    tags: ["Cultura Pop"],
     date: "2026-03-22",
     excerpt: "Antes do 3D, criar um personagem memorável era um exercício de economia: dizer o máximo com o mínimo de blocos coloridos.",
     body: [
