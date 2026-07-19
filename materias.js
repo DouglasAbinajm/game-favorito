@@ -52,6 +52,13 @@
 ============================================================ */
 const MATERIAS = [
   {
+    id: 13,
+    title: "Final Fantasy: o jogo que nasceu para ser o último",
+    category: "Retro",
+    date: "2026-07-19",
+    excerpt: "Em 1987, a Square apostou tudo num RPG que seria sua despedida dos videogames — e o resultado foi o início de uma das maiores franquias da história."
+  },
+  {
     id: 9,
     title: "Edição Nº 01 — Revista de época",
     category: "Revistas",
