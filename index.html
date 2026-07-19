@@ -91,6 +91,7 @@
   </footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="materias.js"></script>
 <script src="site.js"></script>
 <script src="player.js"></script>
@@ -130,11 +131,6 @@ const CATEGORY_LABELS = {
 
 const likesKey = id => `insertcoin_likes_${id}`;
 const commentsKey = id => `insertcoin_comments_${id}`;
-
-function readingTime(bodyArr){
-  const words = bodyArr.join(' ').split(/\s+/).length;
-  return Math.max(1, Math.round(words / 180));
-}
 
 function formatDate(iso){
   const d = new Date(iso + "T12:00:00");
@@ -186,7 +182,7 @@ function renderGrid(){
   const homePosts = getHomePosts();
   const filtered = homePosts.filter(p => {
     const matchesCategory = currentCategory === null || p.category === currentCategory;
-    const haystack = (p.title + ' ' + p.excerpt + ' ' + p.body.join(' ')).toLowerCase();
+    const haystack = (p.title + ' ' + p.excerpt).toLowerCase();
     const matchesQuery = query === '' || haystack.includes(query);
     return matchesCategory && matchesQuery;
   });
@@ -209,7 +205,6 @@ function renderGrid(){
     card.innerHTML = `
       <div class="post-meta-row">
         <span>${formatDate(p.date)}</span>
-        <span>${readingTime(p.body)} MIN</span>
       </div>
       <h2>${p.title}</h2>
       <p class="excerpt">${p.excerpt}</p>
@@ -235,7 +230,7 @@ function renderGrid(){
 }
 
 /* ============ POST VIEW ============ */
-function openPost(id, updateUrl){
+async function openPost(id, updateUrl){
   const post = MATERIAS.find(p => p.id === id);
   if (!post) return;
   currentPostId = id;
@@ -254,12 +249,33 @@ function openPost(id, updateUrl){
 
   document.getElementById('post-eyebrow').textContent = (CATEGORY_LABELS[post.category] || post.category).toUpperCase();
   document.getElementById('post-title').textContent = post.title;
+  document.getElementById('post-meta').innerHTML = `<span>${formatDate(post.date)}</span>`;
+  document.getElementById('post-body').innerHTML = '<p>Carregando matéria...</p>';
+  window.scrollTo({ top: 0 });
+
+  /* O texto da matéria vive em Postagens/<id>.md, escrito em
+     Markdown. Buscamos o arquivo e convertemos pra HTML aqui. */
+  let markdown;
+  try {
+    const res = await fetch(`Postagens/${post.id}.md`);
+    if (!res.ok) throw new Error('arquivo não encontrado');
+    markdown = await res.text();
+  } catch (err) {
+    document.getElementById('post-body').innerHTML =
+      '<p>Não foi possível carregar o texto dessa matéria. Verifique se o arquivo ' +
+      `<code>Postagens/${post.id}.md</code> existe.</p>`;
+    return;
+  }
+
+  const words = markdown.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.round(words / 180));
   document.getElementById('post-meta').innerHTML = `
     <span>${formatDate(post.date)}</span>
-    <span>${readingTime(post.body)} MIN DE LEITURA</span>
+    <span>${minutes} MIN DE LEITURA</span>
   `;
+
   document.getElementById('post-body').innerHTML =
-    post.body.map(p => `<p>${p}</p>`).join('') +
+    marked.parse(markdown) +
     (post.video ? `
       <div class="post-video">
         <iframe
@@ -285,7 +301,6 @@ function openPost(id, updateUrl){
   likeBtn.onclick = () => toggleLike(post.id, likeBtn, likeCountEl);
 
   renderComments(post.id);
-  window.scrollTo({ top: 0 });
 }
 
 function setActiveNav(id){

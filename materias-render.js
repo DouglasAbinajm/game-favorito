@@ -10,11 +10,6 @@ function mfFormatDate(iso){
   return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }).replace('.', '');
 }
 
-function mfReadingTime(bodyArr){
-  const words = bodyArr.join(' ').split(/\s+/).length;
-  return Math.max(1, Math.round(words / 180));
-}
-
 function renderMateriaCategory(category, containerId){
   const list = MATERIAS
     .filter(m => m.category === category)
@@ -31,7 +26,6 @@ function renderMateriaCategory(category, containerId){
     <a class="post-card show" href="index.html?post=${m.id}">
       <div class="post-meta-row">
         <span>${mfFormatDate(m.date)}</span>
-        <span>${mfReadingTime(m.body)} MIN</span>
       </div>
       <h2>${m.title}</h2>
       <p class="excerpt">${m.excerpt}</p>
@@ -41,15 +35,17 @@ function renderMateriaCategory(category, containerId){
 }
 
 /* ============ BUSCA GLOBAL ============
-   Pesquisa em título, resumo, categoria e corpo do texto de TODAS
-   as matérias, não importa a categoria. */
+   Pesquisa em título, resumo e categoria de TODAS as matérias
+   (o texto completo de cada uma vive num arquivo .md separado,
+   carregado só quando a matéria é aberta — por isso a busca não
+   entra nesse texto). */
 function searchMaterias(query){
   const q = query.trim().toLowerCase();
   if (q === '') return [];
   return MATERIAS
     .filter(m => {
       const haystack = (
-        m.title + ' ' + m.excerpt + ' ' + m.category + ' ' + m.body.join(' ')
+        m.title + ' ' + m.excerpt + ' ' + m.category
       ).toLowerCase();
       return haystack.includes(q);
     })

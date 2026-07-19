@@ -196,6 +196,34 @@
   .post-header .meta{ font-family:var(--body); font-size:16px; color:var(--text-soft); display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
   .post-body{ font-size:21px; line-height:1.7; margin-top:28px; }
   .post-body p{ margin:0 0 22px; }
+  .post-body h1, .post-body h2, .post-body h3{
+    font-family:var(--display); font-weight:400; color:var(--text);
+    line-height:1.6; margin:32px 0 18px;
+  }
+  .post-body h1{ font-size:17px; }
+  .post-body h2{ font-size:15px; }
+  .post-body h3{ font-size:13px; }
+  .post-body strong{ color:var(--yellow); }
+  .post-body em{ color:var(--cyan); font-style:italic; }
+  .post-body a{ color:var(--cyan); text-decoration:underline; text-underline-offset:3px; }
+  .post-body a:hover{ color:var(--pink); }
+  .post-body ul, .post-body ol{ margin:0 0 22px; padding-left:28px; }
+  .post-body li{ margin-bottom:8px; }
+  .post-body blockquote{
+    margin:0 0 22px; padding:4px 18px; border-left:3px solid var(--purple);
+    color:var(--text-soft); font-style:italic;
+  }
+  .post-body code{
+    font-family:var(--body); background:var(--bg-raised); border:1px solid var(--line);
+    padding:1px 6px; color:var(--cyan); font-size:0.95em;
+  }
+  .post-body pre{
+    background:var(--bg-raised); border:2px solid var(--line); padding:16px;
+    overflow-x:auto; margin:0 0 22px;
+  }
+  .post-body pre code{ border:none; padding:0; background:none; }
+  .post-body hr{ border:none; border-top:2px solid var(--line); margin:28px 0; }
+  .post-body img{ max-width:100%; height:auto; border:2px solid var(--line); }
   .post-video{
     position:relative;
     width:100%;
