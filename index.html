@@ -29,7 +29,7 @@
           <a href="detonados.html" data-cat="Detonados"><span class="dd-icon"></span>Detonados</a>
         </div>
       </div>
-      <a href="busca.html">Buscar</a>
+      <a href="noticias.html">Notícias</a>
       <a href="sobre.html">Sobre</a>
       <a href="contato.html">Contato</a>
       <button id="crt-toggle" aria-label="Ligar ou desligar efeito CRT" title="Efeito CRT">CRT: ON</button>
@@ -39,62 +39,98 @@
   <section class="hero" id="view-hero">
     <img class="banner-svg" src="banner.png" alt="Game Favorito — Nostalgia que nunca acaba. Arte pixel art com personagens e castelos de RPGs clássicos." />
     <div class="eyebrow blink">▸ PRESS START</div>
-    <h1>Notas sobre os jogos que moldaram uma geração inteira de jogadores.</h1>
-    <p class="lede">Um caderno público sobre consoles, fliperamas, cartuchos e a cultura que nasceu junto com os primeiros pixels. Sem nostalgia vazia — só o que ainda ensina algo hoje.</p>
+    <a href="#" class="featured-post" id="featured-post" style="display:none;">
+      <div class="featured-post-inner">
+        <div class="fp-eyebrow" id="featured-eyebrow">MATÉRIA MAIS ACESSADA</div>
+        <h2 id="featured-title"></h2>
+        <p id="featured-excerpt"></p>
+      </div>
+    </a>
   </section>
+</div>
 
-  <section class="controls">
-    <div class="search-box">
-      <input type="text" id="search-input" placeholder="Buscar por título ou palavra-chave...">
-    </div>
-    <div class="tags" id="tag-list"></div>
-    <div class="result-count" id="result-count"></div>
-  </section>
-
-  <main>
-    <section id="view-list">
-      <div class="post-grid" id="post-grid"></div>
+<div class="site-light">
+  <div class="wrap">
+    <section class="controls">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Buscar por título ou palavra-chave...">
+      </div>
+      <div class="tags" id="tag-list"></div>
+      <div class="result-count" id="result-count"></div>
     </section>
 
-    <section id="view-post" class="hidden">
-      <button class="back-link" onclick="goHome()">◂ VOLTAR</button>
-      <div class="post-header">
-        <div class="eyebrow" id="post-eyebrow"></div>
-        <h1 id="post-title"></h1>
-        <div class="meta" id="post-meta"></div>
+    <main>
+      <section id="view-list">
+        <div class="post-grid" id="post-grid"></div>
+      </section>
+
+      <section id="view-post" class="hidden">
+        <button class="back-link" onclick="goHome()">◂ VOLTAR</button>
+        <div class="post-header">
+          <div class="eyebrow" id="post-eyebrow"></div>
+          <h1 id="post-title"></h1>
+          <div class="meta" id="post-meta"></div>
+        </div>
+        <div class="post-body" id="post-body"></div>
+
+        <div class="likes-row">
+          <button class="like-btn" id="post-like-btn">♥ <span id="post-like-count">0</span> curtidas</button>
+        </div>
+
+        <hr class="divider">
+
+        <div class="comments">
+          <h3 id="comments-title">COMENTÁRIOS</h3>
+
+          <div class="auth-box" id="auth-box">
+            <div class="auth-tabs">
+              <button type="button" class="auth-tab active" id="tab-login">ENTRAR</button>
+              <button type="button" class="auth-tab" id="tab-signup">CRIAR CONTA</button>
+            </div>
+
+            <form class="auth-form" id="login-form">
+              <input type="email" id="login-email" placeholder="E-mail" required>
+              <input type="password" id="login-password" placeholder="Senha" required>
+              <button type="submit">ENTRAR</button>
+              <div class="auth-msg" id="login-msg"></div>
+            </form>
+
+            <form class="auth-form hidden" id="signup-form">
+              <input type="text" id="signup-name" placeholder="Seu nome" required>
+              <input type="email" id="signup-email" placeholder="E-mail" required>
+              <input type="password" id="signup-password" placeholder="Senha (mín. 6 caracteres)" required>
+              <button type="submit">CRIAR CONTA</button>
+              <div class="auth-msg" id="signup-msg"></div>
+            </form>
+          </div>
+
+          <div class="logged-box hidden" id="logged-box">
+            <div class="logged-as">Comentando como <strong id="logged-name"></strong> · <button type="button" id="logout-btn">Sair</button></div>
+            <form class="comment-form" id="comment-form">
+              <textarea id="comment-text" placeholder="Escreva um comentário..." rows="3" required></textarea>
+              <button type="submit">PUBLICAR</button>
+            </form>
+          </div>
+
+          <div id="comments-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="simple">
+      <div class="footer-meta">
+        GAME FAVORITO © 2026<br>
+        Feito com HTML, CSS e JavaScript puro.
       </div>
-      <div class="post-body" id="post-body"></div>
-
-      <div class="likes-row">
-        <button class="like-btn" id="post-like-btn">♥ <span id="post-like-count">0</span> curtidas</button>
-      </div>
-
-      <hr class="divider">
-
-      <div class="comments">
-        <h3 id="comments-title">COMENTÁRIOS</h3>
-        <form class="comment-form" id="comment-form">
-          <input type="text" id="comment-name" placeholder="Seu nome" required>
-          <textarea id="comment-text" placeholder="Escreva um comentário..." rows="3" required></textarea>
-          <button type="submit">PUBLICAR</button>
-        </form>
-        <div id="comments-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="simple">
-    <div class="footer-meta">
-      GAME FAVORITO © 2026<br>
-      Feito com HTML, CSS e JavaScript puro.
-    </div>
-  </footer>
+    </footer>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script src="materias.js"></script>
 <script src="site.js"></script>
 <script src="player.js"></script>
+<script type="module" src="auth-comments.js"></script>
 
 <script>
 /* ============ DADOS: vêm todos do materias.js ============
@@ -126,11 +162,11 @@ const CATEGORY_LABELS = {
   Retro: 'Retrô',
   Atuais: 'Atuais',
   Revistas: 'Revistas',
-  Detonados: 'Detonados'
+  Detonados: 'Detonados',
+  Noticias: 'Notícias'
 };
 
 const likesKey = id => `insertcoin_likes_${id}`;
-const commentsKey = id => `insertcoin_comments_${id}`;
 
 function formatDate(iso){
   const d = new Date(iso + "T12:00:00");
@@ -154,6 +190,29 @@ function renderTags(){
     chip.onclick = () => { currentCategory = (currentCategory === cat ? null : cat); renderTags(); renderGrid(); };
     tagList.appendChild(chip);
   });
+}
+
+/* ============ DESTAQUE (hero) ============
+   Mostra uma matéria em destaque logo abaixo do PRESS START.
+   Pra escolher qual matéria aparece aqui, adicione a propriedade
+   "featured: true" nela dentro do materias.js (só uma matéria deve
+   ter essa propriedade por vez). Se nenhuma tiver, cai automaticamente
+   para a mais recente. Adicione também "image: 'caminho/da/imagem.jpg'"
+   na matéria pra mostrar uma imagem de fundo no destaque. */
+function renderFeaturedPost(){
+  const featured = MATERIAS.find(p => p.featured) || getHomePosts()[0];
+  if (!featured) return;
+
+  const el = document.getElementById('featured-post');
+  document.getElementById('featured-title').textContent = featured.title;
+  document.getElementById('featured-excerpt').textContent = featured.excerpt;
+
+  if (featured.image){
+    el.style.backgroundImage = `url('${featured.image}')`;
+  }
+
+  el.style.display = 'flex';
+  el.onclick = (e) => { e.preventDefault(); openPost(featured.id); };
 }
 
 /* ============ GRID ============ */
@@ -300,7 +359,7 @@ async function openPost(id, updateUrl){
   likeCountEl.textContent = getLikeCount(post.id);
   likeBtn.onclick = () => toggleLike(post.id, likeBtn, likeCountEl);
 
-  renderComments(post.id);
+  window.loadCommentsForPost(post.id);
 }
 
 function setActiveNav(id){
@@ -324,55 +383,11 @@ function goHome(updateUrl){
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ============ COMMENTS ============ */
-function getComments(id){
-  try { return JSON.parse(localStorage.getItem(commentsKey(id)) || '[]'); }
-  catch(e){ return []; }
-}
-function saveComment(id, comment){
-  const list = getComments(id);
-  list.push(comment);
-  localStorage.setItem(commentsKey(id), JSON.stringify(list));
-}
-function renderComments(id){
-  const list = getComments(id);
-  const container = document.getElementById('comments-list');
-  document.getElementById('comments-title').textContent = `COMENTÁRIOS (${list.length})`;
-  if (list.length === 0){
-    container.innerHTML = '<div class="no-comments">Seja a primeira pessoa a comentar.</div>';
-    return;
-  }
-  container.innerHTML = list.map(c => `
-    <div class="comment-item">
-      <div class="who">${escapeHtml(c.name)} <span class="when">${c.when}</span></div>
-      <p>${escapeHtml(c.text)}</p>
-    </div>
-  `).join('');
-}
-function escapeHtml(str){
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-document.getElementById('comment-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = document.getElementById('comment-name').value.trim();
-  const text = document.getElementById('comment-text').value.trim();
-  if (!name || !text || currentPostId === null) return;
-  saveComment(currentPostId, {
-    name, text,
-    when: new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
-  });
-  document.getElementById('comment-name').value = '';
-  document.getElementById('comment-text').value = '';
-  renderComments(currentPostId);
-});
-
 /* ============ SEARCH ============ */
 document.getElementById('search-input').addEventListener('input', renderGrid);
 
 /* ============ INIT ============ */
+renderFeaturedPost();
 renderTags();
 renderGrid();
 

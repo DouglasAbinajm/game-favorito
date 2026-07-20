@@ -21,10 +21,10 @@
    2. Troque o "id" por um número que ainda não exista na lista.
    3. Preencha:
       - title      → título da matéria
-      - category   → EXATAMENTE uma destas quatro, sem acento:
-                      'Retro', 'Atuais', 'Revistas' ou 'Detonados'.
-                      É isso que decide em qual página ela vai
-                      aparecer permanentemente.
+      - category   → EXATAMENTE uma destas cinco, sem acento:
+                      'Retro', 'Atuais', 'Revistas', 'Detonados' ou
+                      'Noticias'. É isso que decide em qual página ela
+                      vai aparecer permanentemente.
       - date       → data no formato AAAA-MM-DD. É por essa data
                       que a ordem "mais recente primeiro" é decidida.
       - excerpt    → um resumo curto (aparece nos cards)
@@ -35,6 +35,13 @@
                       Revistas e Detonados. Remova se não usar.
       - fileLabel  → (opcional) texto do botão de download, ex:
                       "BAIXAR PDF". Se omitir, usa um texto padrão.
+      - featured   → (opcional) coloque "true" numa ÚNICA matéria pra
+                      ela aparecer em destaque na home, logo abaixo do
+                      PRESS START. Se remover essa propriedade de todas,
+                      a mais recente aparece em destaque automaticamente.
+      - image      → (opcional) caminho de uma imagem pra usar como
+                      fundo do destaque, ex: "Postagens/imagens/13-famicom.jpg".
+                      Só é usada quando a matéria está em destaque (featured).
    4. Crie o arquivo Postagens/<id>.md (troque <id> pelo número que
       você escolheu no passo 2) e escreva o texto da matéria nele,
       em Markdown, com uma linha em branco entre parágrafos.
@@ -56,7 +63,9 @@ const MATERIAS = [
     title: "Final Fantasy: o jogo que nasceu para ser o último",
     category: "Retro",
     date: "2026-07-19",
-    excerpt: "Em 1987, a Square apostou tudo num RPG que seria sua despedida dos videogames — e o resultado foi o início de uma das maiores franquias da história."
+    excerpt: "Em 1987, a Square apostou tudo num RPG que seria sua despedida dos videogames — e o resultado foi o início de uma das maiores franquias da história.",
+    featured: true,
+    image: "Postagens/imagens/13-famicom.jpg"
   },
   {
     id: 9,
