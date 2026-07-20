@@ -114,6 +114,7 @@ const MATERIAS = [
     date: "2026-07-20",
     excerpt: "Trago para vocês em primeira mão a Edição 31 da UltraJovem.",
     file: "https://dn721802.ca.archive.org/0/items/ultrajovem-031/ULTRAJOVEM031.pdf",
+    image: "Postagens/imagens/1-ultrajovem31.jpg",
     fileLabel: "BAIXAR PDF"
   },
   {
