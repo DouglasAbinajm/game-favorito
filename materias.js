@@ -109,11 +109,12 @@ const MATERIAS = [
   },
   {
     id: 1,
-    title: "O primeiro console do mundo",
-    category: "Retro",
-    date: "2026-07-15",
-    excerpt: "O primeiro console doméstico do mundo foi o Magnavox Odyssey, lançado nos Estados Unidos em 1972 por US$ 100.",
-    video: "UeRpfWcHuR0"
+    title: "UltraJovem - Edição 31",
+    category: "Revistas",
+    date: "2026-07-20",
+    excerpt: "Trago para vocês em primeira mão a Edição 31 da UltraJovem.",
+    file: "https://dn721802.ca.archive.org/0/items/ultrajovem-031/ULTRAJOVEM031.pdf",
+    fileLabel: "BAIXAR PDF"
   },
   {
     id: 6,
