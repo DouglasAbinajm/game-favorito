@@ -20,3 +20,30 @@
     localStorage.setItem(KEY, off ? '1' : '0');
   });
 })();
+
+/* ============ BOTÃO VOLTAR AO TOPO ============
+   Como site.js é carregado em TODAS as páginas, basta criar o
+   botão aqui uma vez — ele aparece em todo lugar automaticamente,
+   sem precisar copiar HTML em cada página. Ele some no topo da
+   página e aparece depois de rolar um pouco.
+====================================================== */
+(function backToTop(){
+  const btn = document.createElement('button');
+  btn.id = 'back-to-top';
+  btn.className = 'back-to-top';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Voltar ao topo');
+  btn.title = 'Voltar ao topo';
+  btn.innerHTML = '&#9650;';
+  document.body.appendChild(btn);
+
+  function updateVisibility(){
+    btn.classList.toggle('show', window.scrollY > 420);
+  }
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+  updateVisibility();
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();

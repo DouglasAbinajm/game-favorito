@@ -172,6 +172,24 @@
   .tag-chip.active{ background:var(--pink); border-color:var(--pink); color:#0D0221; }
   .result-count{ font-family:var(--body); font-size:16px; color:var(--text-soft); margin-left:auto; }
 
+  /* ---- Botão Voltar ao topo (aparece em todas as páginas) ---- */
+  .back-to-top{
+    position:fixed; left:20px; bottom:20px; z-index:260;
+    width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+    background:var(--bg-panel); border:2px solid var(--line); color:var(--text);
+    font-size:15px; cursor:pointer; padding:0;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, border-color .2s ease, color .2s ease, visibility .25s;
+    clip-path:polygon(0 6px, 6px 6px, 6px 0, calc(100% - 6px) 0, calc(100% - 6px) 6px, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 6px calc(100% - 6px), 0 calc(100% - 6px));
+  }
+  .back-to-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+  .back-to-top:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .site-light .back-to-top{ background:#FAFAFC; border-color:#E4E4EC; color:#1A1A2E; }
+  .site-light .back-to-top:hover{ border-color:var(--purple); color:var(--purple); }
+  @media (max-width:640px){
+    .back-to-top{ left:16px; bottom:16px; width:42px; height:42px; font-size:13px; }
+  }
+
   /* ---- Post grid ---- */
   main{ padding:44px 0 80px; }
   .hidden{ display:none !important; }
@@ -189,6 +207,10 @@
   }
   .post-card.show{ opacity:1; transform:translateY(0); }
   .post-card:hover{ border-color:var(--cyan); box-shadow:0 0 16px rgba(56,253,203,0.25); }
+  .post-card .card-thumb{
+    width:calc(100% + 48px); margin:-24px -24px 0; display:block;
+    height:160px; object-fit:cover; border-bottom:2px solid var(--line);
+  }
   .post-meta-row{
     display:flex; justify-content:space-between; align-items:center;
     font-family:var(--body); font-size:15px; color:var(--text-soft); text-transform:uppercase;
@@ -539,6 +561,7 @@
 
   .site-light .empty-state{ background:#F5F5F8; border-color:#DCDCE6; color:#8A8FA3; }
   .site-light .post-card{ background:#FAFAFC; border-color:#E4E4EC; }
+  .site-light .post-card .card-thumb{ border-bottom-color:#E4E4EC; }
   .site-light .post-card:hover{ border-color:var(--purple); box-shadow:0 6px 18px rgba(139,92,246,0.18); }
   .site-light .post-meta-row{ color:#9498AA; }
   .site-light .post-card h2{ color:#1A1A2E; }

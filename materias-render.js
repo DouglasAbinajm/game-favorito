@@ -24,6 +24,7 @@ function renderMateriaCategory(category, containerId){
 
   grid.innerHTML = list.map(m => `
     <a class="post-card show" href="index.html?post=${m.id}">
+      ${m.image ? `<img class="card-thumb" src="${m.image}" alt="" loading="lazy">` : ''}
       <div class="post-meta-row">
         <span>${mfFormatDate(m.date)}</span>
       </div>
@@ -62,6 +63,7 @@ function renderSearchResults(list, containerId){
 
   grid.innerHTML = list.map(m => `
     <a class="post-card show" href="index.html?post=${m.id}">
+      ${m.image ? `<img class="card-thumb" src="${m.image}" alt="" loading="lazy">` : ''}
       <div class="post-meta-row">
         <span>${mfFormatDate(m.date)}</span>
         <span>${m.category.toUpperCase()}</span>

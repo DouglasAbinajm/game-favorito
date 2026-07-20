@@ -39,9 +39,13 @@
                       ela aparecer em destaque na home, logo abaixo do
                       PRESS START. Se remover essa propriedade de todas,
                       a mais recente aparece em destaque automaticamente.
-      - image      → (opcional) caminho de uma imagem pra usar como
-                      fundo do destaque, ex: "Postagens/imagens/13-famicom.jpg".
-                      Só é usada quando a matéria está em destaque (featured).
+      - image      → (opcional) caminho de uma imagem pra representar
+                      essa matéria, ex: "Postagens/imagens/13-famicom.jpg".
+                      Aparece como miniatura no card, tanto na home
+                      quanto na página da categoria e na busca. Se a
+                      matéria também estiver em destaque (featured),
+                      essa mesma imagem é usada como fundo do destaque.
+                      Se omitir, o card aparece sem imagem, normalmente.
    4. Crie o arquivo Postagens/<id>.md (troque <id> pelo número que
       você escolheu no passo 2) e escreva o texto da matéria nele,
       em Markdown, com uma linha em branco entre parágrafos.

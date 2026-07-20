@@ -19,7 +19,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
   getFirestore, collection, addDoc, query, where, orderBy,
-  onSnapshot, serverTimestamp
+  onSnapshot, serverTimestamp, doc, getDoc, runTransaction
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const app = initializeApp(firebaseConfig);
@@ -227,6 +227,68 @@ window.loadCommentsForPost = function(postId){
       '<div class="no-comments">Não foi possível carregar os comentários agora.</div>';
   });
 };
+
+/* ============================================================
+   CURTIDAS — contagem compartilhada de verdade, no Firestore.
+   Cada matéria tem um documento na coleção "likes" (o ID do
+   documento é o ID da matéria) guardando só um campo: "count".
+   Pra evitar que a mesma pessoa curta infinitas vezes sem
+   precisar pedir login pra isso, guardamos no localStorage DESTE
+   navegador se ela já curtiu essa matéria — não é à prova de
+   trapaça (dá pra curtir de novo numa aba anônima), mas é
+   suficiente pro nível do site.
+============================================================ */
+
+function likedLocallyKey(postId){ return 'gf_liked_' + postId; }
+
+/* Se este navegador já curtiu essa matéria */
+window.hasLikedPost = function(postId){
+  return localStorage.getItem(likedLocallyKey(postId)) === '1';
+};
+
+/* Busca a contagem uma única vez (bom pra listas de cards) */
+window.getLikesForPost = async function(postId){
+  try {
+    const snap = await getDoc(doc(db, 'likes', String(postId)));
+    return snap.exists() ? (snap.data().count || 0) : 0;
+  } catch (err){
+    return 0;
+  }
+};
+
+/* Acompanha a contagem em tempo real (bom pra página de UMA matéria
+   aberta). Retorna uma função pra "desligar" essa escuta. */
+window.watchLikesForPost = function(postId, onCount){
+  return onSnapshot(doc(db, 'likes', String(postId)), (snap) => {
+    onCount(snap.exists() ? (snap.data().count || 0) : 0);
+  }, () => onCount(0));
+};
+
+/* Curte/descurte. Usa uma transação pra somar/subtrair 1 com
+   segurança mesmo que várias pessoas curtam ao mesmo tempo. */
+window.toggleLikePost = async function(postId, onResult){
+  const liked = window.hasLikedPost(postId);
+  const ref = doc(db, 'likes', String(postId));
+  try {
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(ref);
+      const current = snap.exists() ? (snap.data().count || 0) : 0;
+      const next = Math.max(0, current + (liked ? -1 : 1));
+      tx.set(ref, { count: next }, { merge: true });
+    });
+    localStorage.setItem(likedLocallyKey(postId), liked ? '0' : '1');
+    if (onResult) onResult(!liked);
+  } catch (err){
+    console.error(err);
+    if (onResult) onResult(null); // null = deu erro, não muda a tela
+  }
+};
+
+/* Avisa o resto do site que as funções acima já existem — o
+   index.html usa isso pra saber quando pode chamá-las com
+   segurança (este arquivo é um "module", que carrega um pouco
+   depois dos outros scripts). */
+window.dispatchEvent(new Event('gf-firebase-ready'));
 
 /* ---- Init ---- */
 document.addEventListener('DOMContentLoaded', () => {

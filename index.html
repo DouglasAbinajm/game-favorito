@@ -166,8 +166,6 @@ const CATEGORY_LABELS = {
   Noticias: 'Notícias'
 };
 
-const likesKey = id => `insertcoin_likes_${id}`;
-
 function formatDate(iso){
   const d = new Date(iso + "T12:00:00");
   return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }).replace('.', '');
@@ -215,23 +213,73 @@ function renderFeaturedPost(){
   el.onclick = (e) => { e.preventDefault(); openPost(featured.id); };
 }
 
-/* ============ GRID ============ */
-function getLikeCount(id){ return parseInt(localStorage.getItem(likesKey(id)) || '0', 10); }
-function isLiked(id){ return localStorage.getItem(likesKey(id) + '_liked') === '1'; }
-function toggleLike(id, btnEl, countEl){
-  const liked = isLiked(id);
-  let count = getLikeCount(id);
-  if (liked){
-    count = Math.max(0, count - 1);
-    localStorage.setItem(likesKey(id) + '_liked', '0');
-  } else {
-    count = count + 1;
-    localStorage.setItem(likesKey(id) + '_liked', '1');
-  }
-  localStorage.setItem(likesKey(id), String(count));
-  if (countEl) countEl.textContent = count;
-  if (btnEl) btnEl.classList.toggle('liked', !liked);
+/* ============ CURTIDAS ============
+   A CONTAGEM em si fica no Firestore (mesmo banco dos comentários),
+   então é compartilhada de verdade entre todo mundo que visita o
+   site — igual funciona pra qualquer pessoa ver o mesmo número.
+   O que fica só neste navegador (localStorage) é apenas "eu já
+   curti essa matéria", pra pintar o coração e não deixar a mesma
+   pessoa curtir/descurtir sem parar. As funções que de fato falam
+   com o Firestore (getLikesForPost, watchLikesForPost, hasLikedPost,
+   toggleLikePost) vêm do auth-comments.js. */
+
+function isLikedLocally(id){
+  return window.hasLikedPost ? window.hasLikedPost(id) : (localStorage.getItem('gf_liked_' + id) === '1');
 }
+
+/* auth-comments.js é um "module", que carrega um pouquinho depois
+   deste script — essa função espera ele ficar pronto antes de usar
+   qualquer função de curtida/comentário vinda de lá. */
+function whenFirebaseReady(cb){
+  if (window.toggleLikePost) cb();
+  else window.addEventListener('gf-firebase-ready', cb, { once: true });
+}
+
+/* Usada nos cards do grid (home): busca a contagem uma única vez.
+   (Não usa "tempo real" aqui de propósito — o grid pode re-renderizar
+   a cada letra digitada na busca, e não queremos abrir uma conexão
+   nova do Firestore a cada tecla.) */
+function wireLikeButtonStatic(id, btnEl, countEl){
+  btnEl.classList.toggle('liked', isLikedLocally(id));
+  whenFirebaseReady(() => {
+    window.getLikesForPost(id).then(count => { countEl.textContent = count; });
+  });
+  btnEl.onclick = (e) => {
+    if (e) e.stopPropagation();
+    whenFirebaseReady(() => {
+      window.toggleLikePost(id, (nowLiked) => {
+        if (nowLiked === null) return; // deu erro, não muda nada na tela
+        btnEl.classList.toggle('liked', nowLiked);
+        const current = parseInt(countEl.textContent, 10) || 0;
+        countEl.textContent = Math.max(0, current + (nowLiked ? 1 : -1));
+      });
+    });
+  };
+}
+
+/* Usada na página de uma matéria aberta: aqui sim vale a pena
+   "tempo real" (se outra pessoa curtir enquanto você está lendo, o
+   número atualiza sozinho), mas só existe UM botão de curtir na
+   tela por vez, então cancelamos a inscrição anterior sempre que
+   uma matéria nova é aberta, pra não acumular conexões à toa. */
+let unsubscribeLikes = null;
+function wireLikeButtonLive(id, btnEl, countEl){
+  btnEl.classList.toggle('liked', isLikedLocally(id));
+  if (unsubscribeLikes){ unsubscribeLikes(); unsubscribeLikes = null; }
+  whenFirebaseReady(() => {
+    unsubscribeLikes = window.watchLikesForPost(id, (count) => { countEl.textContent = count; });
+  });
+  btnEl.onclick = () => {
+    whenFirebaseReady(() => {
+      window.toggleLikePost(id, (nowLiked) => {
+        if (nowLiked === null) return;
+        btnEl.classList.toggle('liked', nowLiked);
+      });
+    });
+  };
+}
+
+/* ============ GRID ============ */
 
 function renderGrid(){
   const query = document.getElementById('search-input').value.trim().toLowerCase();
@@ -262,6 +310,7 @@ function renderGrid(){
     card.className = 'post-card';
     card.tabIndex = 0;
     card.innerHTML = `
+      ${p.image ? `<img class="card-thumb" src="${p.image}" alt="" loading="lazy">` : ''}
       <div class="post-meta-row">
         <span>${formatDate(p.date)}</span>
       </div>
@@ -270,7 +319,7 @@ function renderGrid(){
       <div class="card-tags"><span>${(CATEGORY_LABELS[p.category] || p.category).toUpperCase()}</span></div>
       <div class="card-foot">
         <span>LER →</span>
-        <button class="like-btn ${isLiked(p.id) ? 'liked' : ''}" data-id="${p.id}">♥ <span>${getLikeCount(p.id)}</span></button>
+        <button class="like-btn" data-id="${p.id}">♥ <span>0</span></button>
       </div>
     `;
     card.addEventListener('click', (e) => {
@@ -279,10 +328,7 @@ function renderGrid(){
     });
     card.addEventListener('keypress', (e) => { if (e.key === 'Enter') openPost(p.id); });
     const likeBtn = card.querySelector('.like-btn');
-    likeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleLike(p.id, likeBtn, likeBtn.querySelector('span'));
-    });
+    wireLikeButtonStatic(p.id, likeBtn, likeBtn.querySelector('span'));
     grid.appendChild(card);
     requestAnimationFrame(() => setTimeout(() => card.classList.add('show'), i * 40));
   });
@@ -355,9 +401,7 @@ async function openPost(id, updateUrl){
 
   const likeBtn = document.getElementById('post-like-btn');
   const likeCountEl = document.getElementById('post-like-count');
-  likeBtn.classList.toggle('liked', isLiked(post.id));
-  likeCountEl.textContent = getLikeCount(post.id);
-  likeBtn.onclick = () => toggleLike(post.id, likeBtn, likeCountEl);
+  wireLikeButtonLive(post.id, likeBtn, likeCountEl);
 
   window.loadCommentsForPost(post.id);
 }
